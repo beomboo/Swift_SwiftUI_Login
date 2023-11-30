@@ -7,17 +7,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var email = ""
-    @State var password = ""
-    
+    @State private var email = ""
+    @State private var password = ""
+    @State private var isShowingAlert: Bool = false
+    @State private var tag:Int? = nil
     var body: some View {
-        ZStack{
-            VStack{
-                iconArea()
-                inputArea
-                accountBtnArea
-                loginBtn
-                companyIcon
+        NavigationStack{
+            ZStack{
+                VStack{
+                    iconArea()
+                    inputArea
+                    accountBtnArea
+                    loginBtn2
+                    companyIcon
+                }
             }
         }
     }
@@ -51,15 +54,17 @@ private extension ContentView{
     }
     
     var accountBtnArea: some View{
-        HStack{
-            Button("ID/PASS 찾기"){
-                // 실행할 코드
-            }.padding(.trailing)
-            Button("회원가입"){
-                // 실행할 코드
-            }.padding(.trailing)
+        HStack(alignment: .center) {
+            NavigationLink("ID/E-mail 찾기"){
+                SearchUserInfo()
+            }
+            .padding(10)
+            
+            NavigationLink("회원가입"){
+                RegisterUserInfo()
+            }
+            .padding(10)
         }
-        .padding(.top,15)
     }
     
     var companyIcon: some View{
@@ -71,18 +76,61 @@ private extension ContentView{
         }
     }
     
-    var loginBtn: some View{
-       Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/){
-           HStack{
-               Image(systemName: "rectangle.and.hand.point.up.left.fill")
-                   .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-               Text("로그인")
-           }
-           .padding(10)
-           .foregroundColor(.white)
-           .background(Color.blue)
-           .cornerRadius(20)
-       }
+    var loginBtn: some View {
+        Button(action: {
+            // TODO: 로그인 액션 구현
+            isShowingAlert = true
+        }) {
+            HStack {
+                Image(systemName: "rectangle.and.hand.point.up.left.fill")
+                    .resizable()
+                    .font(.title)
+                    .frame(width: 30, height: 30)
+                    .padding(.leading, 10)
+                Text("로그인하기")
+                    .font(.system(size: 20))
+                    .bold(true)
+                    .frame(width: 150)
+            }
+            .frame(height: 30)
+            .padding(10)
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(20)
+        }
+        .padding(.top, 20)
+    }
+    
+    var loginBtn2: some View {
+        Button{
+            isShowingAlert = true
+        } label: {
+            HStack {
+                Image(systemName: "rectangle.and.hand.point.up.left.fill")
+                    .resizable()
+                    .font(.title)
+                    .frame(width: 30, height: 30)
+                    .padding(.leading, 10)
+                Text("로그인하기")
+                    .font(.system(size: 20))
+                    .bold(true)
+                    .frame(width: 150)
+                    .alert("BeomBoo", isPresented: $isShowingAlert) {
+                        Button {
+                            loginConfirm()
+                        } label: {
+                            Text("OK")
+                        }
+                    } message: {
+                        Text("회원가입이 완료되었습니다.")
+                    }
+            }
+            .frame(height: 30)
+            .padding(10)
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(20)
+        }
     }
 }
 
